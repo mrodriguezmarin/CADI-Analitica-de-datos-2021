@@ -1,0 +1,139 @@
+---
+title: "Envases II"
+author: "Prof. Mauro Rodriguez"
+date: "11 de octubre de 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Introducir la serie de tiempo en notacion cientifica o formato general, de otra forma aparecen inconsistencias. Último dato histórico cierre de agosto de 2019.
+
+```{r}
+getwd()
+```
+
+
+```{r}
+
+setwd("C:/Users/L01191825/Desktop/Laptop/Documents/Taller R")
+
+Envases<-read.csv("envases_plastico.csv")
+
+Envases
+```
+
+
+```{r}
+library(tseries)
+```
+
+```{r}
+ts.Envases=ts(Envases, frequency =12, start=c(1993,1), end = c(2019,7))
+```
+
+
+
+```{r}
+
+plot(ts.Envases)
+
+```
+```{r}
+ts.Envases
+```
+
+
+```{r}
+dim(as.matrix(ts.Envases))
+```
+#Base de datos para entrenamiento y prueba
+
+```{r}
+Envases.train=window(ts.Envases, start=c(2000,1), end=c(2016,12))
+plot(Envases.train)
+
+```
+
+```{r}
+Envases.train
+```
+
+
+```{r}
+dim(as.matrix(Envases.train))
+```
+
+```{r}
+Envases.test=window(ts.Envases, start=c(2017,1), end=c(2019,7))
+plot(Envases.test)
+```
+
+```{r}
+library(forecast)
+
+arima1=auto.arima(Envases.train, trace=TRUE, test = "kpss",ic="bic" )
+```
+
+```{r}
+summary(arima1)
+confint(arima1)
+```
+
+#Diagnostico de residuales
+
+```{r}
+#install.packages("tseries")
+#install.packages("forecast")
+#install.packages("TSPred")
+library(forecast)
+library(tseries)
+library(TSPred)
+```
+
+#En lugar de la funcion forecast. Arima usar la funcion "forecast"
+
+```{r}
+arima1.forecast=forecast(arima1, h=32)
+
+arima1.forecast
+```
+
+
+```{r}
+plot(arima1.forecast, xlab="Anios", ylab="Exportación de envases de plástico (miles de dólares))")
+```
+
+```{r}
+library(TSPred)
+```
+
+
+```{r}
+
+plotarimapred(Envases.test,arima1,xlim=c(2016,2019), range.percent = 0.03, ylab = "Exportación de Envases",
+xlab = "---- real  ____ Pronóstico")
+
+```
+Control z es undo
+
+```{r}
+accuracy(arima1.forecast,Envases.test)
+
+```
+
+
+```{r}
+arima1.forecast=forecast(arima1, h=48)
+
+arima1.forecast
+```
+
+```{r}
+plot(arima1.forecast)
+```
+
+`
+
