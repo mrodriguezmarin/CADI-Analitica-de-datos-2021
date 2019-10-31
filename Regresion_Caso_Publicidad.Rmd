@@ -1,0 +1,28 @@
+---
+title: "Regresión lineal Publicidad Semana i"
+author: "Prof. Mauro Rodriguez"
+date: "31/10/2019"
+output: html_document
+---
+
+
+```{r}
+x<-c(1,2,3,4,5)
+y<-c(1,1,2,2,4)
+
+```
+
+#instalar la librería ggplot2 (Si es que no se tiene)
+#library(plot)
+
+```{r}
+plot(x,y)
+abline(lm(y~x)) 
+regresion_linear<-lm(y~x,)
+
+```
+
+```{r}
+summary(regresion_linear)
+```
+
