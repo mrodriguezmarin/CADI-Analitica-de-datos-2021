@@ -1,0 +1,53 @@
+---
+title: "Teoria de filas en RStudio práctica #6 "
+author: "Prof. Mauro Rodriguez LN3010"
+date: "10/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Análisis en la clínica #178 del IMSS en Zapopan, Jalisco
+
+```{r}
+install.packages("simmer",dependencies=T) #Autores de esta función:BartSmeets e Iñaki Ucar
+library(simmer)
+proceso<-simmer("Clinica de consulta IMSS")
+proceso
+```
+
+
+```{r}
+
+paciente<-trajectory("patients'path")%>%
+  seize("enfermera",1)%>%
+  timeout(function()rnorm(1,15))%>%
+  release("enfermera",1)%>%
+  
+  seize("doctor",1)%>%
+  timeout(function()rnorm(1,20))%>%
+  release("doctor",1)%>%
+  
+  seize("farmacia",1)%>%
+  timeout(function()rnorm(1,5))%>%
+  release("farmacia",1)
+proceso %>%
+
+    add_resource("enfermera",2)%>%
+    add_resource("doctor",3)%>%
+    add_resource("farmacia",2)%>%
+    add_generator("paciente",paciente, function() rnorm(1,5,0.5))
+
+proceso %>% run(until = 660) #Tiempo de servicio en el IMSS 178 de 8AM a 7PM
+#La llegada total de pacientes es de 100
+  
+```
+
+
+```{r}
+plot(proceso,what="resources",metric="usage",c("enfermera","doctor","farmacia"),items=c("server","queue"))
+plot(proceso,what="arrivals",metric="waiting_time")
+```
+
