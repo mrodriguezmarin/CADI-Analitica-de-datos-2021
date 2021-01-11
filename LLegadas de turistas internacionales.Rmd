@@ -1,0 +1,129 @@
+---
+title: "Tourism"
+author: "Mauro Rodriguez"
+date: "12 de 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Introducir la serie de tiempo en notaci?n cient?fica o formato general
+```{r}
+setwd("C:/Users/L01191825/Documents/CADI Analitica_R")
+
+Miles_de_Turistas<-read.csv("Miles_de_turistas.csv")
+
+Miles_de_Turistas
+```
+
+
+```{r}
+#library(tseries)
+```
+
+```{r}
+ts.Miles_de_Turistas=ts(Miles_de_Turistas, frequency =12, start=c(1980,1), end = c(2020,10))
+
+```
+
+
+
+```{r}
+
+plot(ts.Miles_de_Turistas)
+
+```
+```{r}
+ts.Miles_de_Turistas
+```
+
+
+```{r}
+dim(as.matrix(ts.Miles_de_Turistas))
+```
+#Base de datos para entrenamiento y prueba
+
+```{r}
+Miles_de_Turistas.train=window(ts.Miles_de_Turistas, start=c(2000,1), end=c(2016,12))
+plot(Miles_de_Turistas.train)
+
+```
+
+```{r}
+Miles_de_Turistas.train
+```
+
+
+```{r}
+dim(as.matrix(Miles_de_Turistas.train))
+```
+
+```{r}
+Miles_de_Turistas.test=window(ts.Miles_de_Turistas, start=c(2017,1), end=c(2019,4))
+plot(Miles_de_Turistas.test)
+```
+
+```{r}
+library(forecast)
+
+arima1=auto.arima(Miles_de_Turistas.train, trace=TRUE, test = "kpss",ic="bic" )
+```
+
+```{r}
+summary(arima1)
+confint(arima1)
+```
+
+#Diagn?stico de residuales
+
+```{r}
+#install.packages("tseries")
+#install.packages("forecast")
+#install.packages("TSPred")
+library(forecast)
+library(tseries)
+library(TSPred)
+```
+
+#En lugar de la funci?n forecast.Arima use la funci?n "forecast"
+```{r}
+arima1.forecast=forecast(arima1, h=36)
+
+arima1.forecast
+```
+
+
+```{r}
+plot(arima1.forecast, xlab="Year", ylab="Llegada de turistas internacionales (miles))")
+```
+
+```{r}
+library(TSPred)
+```
+
+
+```{r}
+
+plotarimapred(Miles_de_Turistas.test,arima1,xlim=c(2016,2018), range.percent = 0.05, ylab = "Llegada de turistas",
+xlab = "---- real  ____ proyección")
+
+```
+
+```{r}
+accuracy(arima1.forecast,Miles_de_Turistas.test)
+
+```
+
+
+```{r}
+arima1.forecast=forecast(arima1, h=60)
+
+arima1.forecast
+```
+
+```{r}
+plot(arima1.forecast)
+```
+
