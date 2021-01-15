@@ -1,0 +1,75 @@
+---
+title: "Clusters analisys"
+author: "Mauro Rodríguez"
+date: "1/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+#install.packages("maps")    #instalar estos paquetes
+#install.packages("mapdata")
+#install.packages("ggplot2")
+#install.packages("dplyr")
+```
+
+
+```{r}
+library(maps)
+library(mapdata)
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
+Datos<-read.csv("Proveedores_resp.csv")
+Datos
+```
+
+
+```{r}
+Proveedor<-Datos$Criterios
+View(Proveedor)
+```
+
+
+```{r}
+#modelo<-hclust(dist(Datos),method = "ward.D2")
+#plot(modelo)
+```
+
+
+```{r}
+euclid<-dist(Datos, method = "euclidean")
+euclid
+```
+
+```{r}
+hieralchical<-hclust(euclid,method="ward.D")
+hieralchical
+```
+```{r}
+plot(hieralchical, labels = Proveedor)
+```
+
+```{r}
+rect.hclust(hieralchical, k=4 , border = "magenta")
+
+```
+
+
+
+```{r}
+
+#Cluster_VW<-cbind(Proveedor,Datos, Resultado_cluster)
+
+#print(Cluster_VW)
+
+```
+
+
