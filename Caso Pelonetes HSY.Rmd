@@ -1,0 +1,98 @@
+---
+title: "Caso pelonetes"
+author: "Prof. Mauro Rodriguez"
+date: "5/12/2021"
+output: html_document
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Situación problema
+
+Situación problema A principios de noviembre de 2020, el Ing. José García, gerente de Producción del área Spicy de Hershey’s solicitó al área de planificación de la demanda el pronóstico de ventas del siguiente año para Pelonetes, el objetivo planear la producción del año 2021. Actualmente este SKU (producto) que representaba el 54 % de las ventas totales de dicha área (Hershey, 2020) según datos del departamento de Planeación de la demanda. Los históricos de ventas en cajas por mes de los últimos dos años se muestra en el cuadro 2. La estimación de la demanda es imprescindible para iniciar el proceso de planeación (Gil, et al, 2020) A usted lo están contratando como consultor para que realice un pronóstico de la demanda numérico en RStudio con el modelo de regresión lineal simple. Con esta información de pronóstico el ing. García iniciará el proceso de planeación: compras de insumos, revisión de capacidad de la línea, contratación de personal, espacio en almacén, entre otros. Estos procesos son claves particularmente en mercados emergentes para considerarlo en la planeación (Rodríguez, 2021)
+
+```{r}
+#Definir el objeto de mes. Utilizando y cargando el archivo .CSV de pelonetes
+mes<-pelonetes$Mes
+mes
+class(mes)
+#Definir el objeto de ventas
+ventas<-pelonetes$Ventas
+ventas
+```
+
+```{r}
+#Graficar el histograma y la recta de regresión lineal en R
+plot(mes,ventas)
+abline(lm(ventas~mes))
+```
+
+```{r}
+#Asignar a la regresión a la función lm (linear model) y pedir un resumen de los resultados de la regresión lineal.
+regresion<-lm(ventas~mes,)
+summary(regresion)
+```
+
+
+```{r}
+#Solución
+#1) Si es posible desde el punto de vista estadístico aunque en este caso la R2 es muy baja, los pronósticos no serán tan acertados, los puntos muestra no describen bien a las serie.
+#2) El índice de determinación es R2=0.244 
+#3) Ecuación de regresión: ventas=16202.69-92.90 *mes
+#4 Proyección por mes
+
+mes1<-16202.69-(92.90)*25
+mes1
+```
+
+```{r}
+mes2<-16202.69-(92.90)*26
+mes2
+mes3<-16202.69-(92.90)*27
+mes3
+mes4<-16202.69-(92.90)*28
+mes4
+mes5<-16202.69-(92.90)*29
+mes5
+mes6<-16202.69-(92.90)*30
+mes6
+mes7<-16202.69-(92.90)*31
+mes7
+mes8<-16202.69-(92.90)*32
+mes8
+mes9<-16202.69-(92.90)*33
+mes9
+mes10<-16202.69-(92.90)*34
+mes10
+mes11<-16202.69-(92.90)*35
+mes11
+mes12<-16202.69-(92.90)*36
+mes12
+
+```
+
+```{r}
+tendencia_mensual<-c(mes1,mes2,mes3,mes4,mes5,mes6,mes7,mes8,mes9,mes10,mes11,mes12)
+summary(tendencia_mensual)
+```
+
+
+```{r}
+#Pronóstico total 2021
+Proyección_anual<-c(mes1+mes2+mes3+mes4+mes5+mes6+mes7+mes8+mes9+mes10+mes11+mes12)
+Proyección_anual
+```
+
+```{r}
+#Conclusión
+#Con los datos proporcionados se observa una tendencia negativa en la serie de ventas de Pelonetes, el resultado de la pendiente es negativa por lo que si contunua esta tendencia se proyecta un decremento en las ventas totales, el promedio de venta mensual para 2021 es de 13,369 cajas, con un mínimo de 12,858 y un máximo de 13,880 cajas. Con esta información el INg. García debe tomar previsiones de comprar menos insumos, y la fuerza de trabajo que empleará sereá menor que en 2020, también su capacidad de producción será suficiente, la estrategía de inventarios se tiene que re-diselar con base a esta evidencia.
+
+```
+
+#Referencias: 1. Hershey´s old history, recatado el 12 de marzo: https://www.youtube.com/watch?v=ophXa_LvUKk 2. Cuevas J., Zavala A. (2007). Caso 28-12-005, Centro Internacional de Casos CIC ITESM. 3. Hershey (2020) Rescatado el 12 de marzo: https://www.thehersheycompany.com/es_mx/search.html?q=pelonetes&sp_cs=UTF8&sp_k=C_corporate_mx 4. Gil, M., Rodriguez, M y Montoya, M. (2020). The impact of demand planning on the performance of small and medium-sized enterprises (SMEs) in Mexico. Advances in Business Related Scientific Research Journal. Vol 11 (2): 56-72. Rescatado el 10 de marzo 2021: https://www.absrc.org/publications/absrj-2020-volume-11-number-2-gil/ 5. Rodríguez, M. (2021). Impacto de Administración de la demanda en mercados emergentes. Multidisciplinary Business Review, 14 (1): XX-XX. [ISSN 0718-400X (Online)].
+
